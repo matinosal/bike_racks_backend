@@ -22,8 +22,6 @@ class MapMarkersController extends AbstractController
             return $this->json([
                 'message' => "invalid fields",
                 'markers' => [],
-                'esssa' => $data,
-                'esssa1' => $data['points'][0]['longitude'],
             ], 400);
         }
 
