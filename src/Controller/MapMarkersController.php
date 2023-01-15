@@ -39,4 +39,14 @@ class MapMarkersController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}', methods:["POST","GET"], name:"get_marker_info")]
+    public function getMarkerInfo(ManagerRegistry $doctrine, int $id): JsonResponse
+    {
+        $marker = $doctrine->getManager()->getRepository(MapMarker::class)->find($id);
+        return $this->json([
+            'code'      => 200,
+            'marker'   => $marker->toJson()
+        ]);
+    }
+
 }
