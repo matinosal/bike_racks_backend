@@ -12,18 +12,17 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[Route('/user')]
 class UserController extends AbstractController
 {
-    #[Route('add',methods:"POST", name:"add_user")]
+    #[Route('/add',methods:"POST", name:"add_user")]
     public function addUser(ManagerRegistry $doctrine,Request $request, UserPasswordHasherInterface $passwordHasher)
     {
-        $data = $request->toArray();
-        if(!isset($data['user'])){
+        $userData = $request->toArray();
+        if(!isset($userData)){
             return $this->json([
                 'message' => "invalid fields",
-                'data'    => "false"
+                'data'    => false
             ],400);
         }
 
-        $userData = $data['user'];
         $errors = $this->validateFields(
             $userData,
             ["username","password","email"]
@@ -38,14 +37,24 @@ class UserController extends AbstractController
 
             return $this->json([
                 'message' => "$message",
-                'data'    => "false"
+                'data'    => false
             ],400);
         }
 
         $userManager = $doctrine->getManager();
+        $userRepository = $doctrine->getRepository(User::class);
+        $user = $userRepository->findOneBy(['email' => $userData['email']]);
+        if($user != null){
+            return $this->json([
+                'message' => "User with this email exist. Try another one",
+                'data'    => false
+            ],400);
+        }
+
         $user = new User();
         $user->setLogin($userData['username']);
         $user->setEmail($userData['email']);
+        $user->setDateAdd(new \DateTime());
         $user->setPassword(
             $passwordHasher->hashPassword(
                 $user,
