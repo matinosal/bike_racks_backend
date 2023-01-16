@@ -5,12 +5,15 @@ namespace App\Controller;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-#[Route('/user')]
-class UserController extends AbstractController
+#[Route('/api/user')]
+class UserController extends BaseController
 {
     #[Route('/add',methods:"POST", name:"add_user")]
     public function addUser(ManagerRegistry $doctrine,Request $request, UserPasswordHasherInterface $passwordHasher)
@@ -68,6 +71,17 @@ class UserController extends AbstractController
 
         return $this->json([
             'data'  => true
+        ]);
+    }
+
+    #[Route('/',methods:"POST", name:"get_user_info")]
+    public function getUserInfo(Security $security){
+        $serializer = $this->getJsonSerializer();
+        $user =  $security->getUser();
+
+        return $this->json([
+            'data'  => true,
+            'user'  => $serializer->serialize($user,'json'),
         ]);
     }
 
