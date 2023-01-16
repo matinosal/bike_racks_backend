@@ -28,14 +28,9 @@ class MapMarkersController extends AbstractController
         $mapMarkersRepository = $doctrine->getManager()->getRepository(MapMarker::class);
         $markers = $mapMarkersRepository->getMarkers($data['points'][0], $data['points'][1]);
 
-        $markersAsJson = [];
-        foreach($markers as $obj){
-            $markersAsJson[] = $obj->toJsonQuickInfo();
-        }
-
         return $this->json([
             'code'      => 200,
-            'markers'   => $markersAsJson
+            'markers'   => $markers
         ]);
     }
 
@@ -45,7 +40,7 @@ class MapMarkersController extends AbstractController
         $marker = $doctrine->getManager()->getRepository(MapMarker::class)->find($id);
         return $this->json([
             'code'      => 200,
-            'marker'    => $marker->toJson()
+            'marker'    => $marker
         ]);
     }
 

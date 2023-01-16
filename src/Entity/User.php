@@ -5,11 +5,12 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -39,6 +40,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $ip_address = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $img_src = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $user_bio = null;
 
     public function getId(): ?int
     {
@@ -156,5 +163,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->ip_address = $ip_address;
 
         return $this;
+    }
+
+    public function getImgSrc(): ?string
+    {
+        return $this->img_src;
+    }
+
+    public function setImgSrc(?string $img_src): self
+    {
+        $this->img_src = $img_src;
+
+        return $this;
+    }
+
+    public function getUserBio(): ?string
+    {
+        return $this->user_bio;
+    }
+
+    public function setUserBio(?string $user_bio): self
+    {
+        $this->user_bio = $user_bio;
+
+        return $this;
+    }
+
+    public function jsonSerialize(){
+        return [
+            'id'        => $this->id,
+            'username'  => $this->login,
+            'date_add'  => $this->date_add,
+            'image'     => $this->img_src,
+            'bio'       => $this->user_bio,
+        ];
     }
 }

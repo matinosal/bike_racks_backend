@@ -2,7 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\MapMarker;
 use App\Entity\User;
+use App\Entity\UserVisitedMarkers;
+use App\Repository\MapMarkerRepository;
+use App\Repository\UserVisitedMarkersRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Security;
@@ -75,13 +79,16 @@ class UserController extends BaseController
     }
 
     #[Route('/',methods:"POST", name:"get_user_info")]
-    public function getUserInfo(Security $security){
-        $serializer = $this->getJsonSerializer();
+    public function getUserInfo(Security $security, ManagerRegistry $doctrine){
         $user =  $security->getUser();
-
+        $visited = $doctrine->getManager()->getRepository(UserVisitedMarkers::class)->countVisited($user->getId());
+        $added = $doctrine->getManager()->getRepository(MapMarker::class)->countAddedByUser($user->getId());
         return $this->json([
-            'data'  => true,
-            'user'  => $serializer->serialize($user,'json'),
+            'user'  => $user,
+            'stats' => [
+                'visited' => $visited,
+                'added'   => $added
+            ]
         ]);
     }
 

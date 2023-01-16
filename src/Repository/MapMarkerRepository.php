@@ -57,4 +57,14 @@ class MapMarkerRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+
+    public function countAddedByUser(int $userId): int {
+        return $this->createQueryBuilder('u')
+                ->andWhere('u.added_by = :id')
+                ->setParameter('id',$userId)
+                ->select('COUNT (u.added_by) as added')
+                ->getQuery()
+                ->getOneOrNullResult()['added'];
+    }
+
 }
