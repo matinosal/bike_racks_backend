@@ -64,13 +64,22 @@ class MapMarker implements JsonSerializeObject
         return $this;
     }
 
+    public function toJsonQuickInfo()
+    {
+        return [
+            'id'            => $this->id,
+            'latitude'      => $this->latitude,
+            'longitude'     => $this->longitude,
+        ];
+    }
+
     public function toJson()
     {
         return [
             'id'            => $this->id,
             'latitude'      => $this->latitude,
             'longitude'     => $this->longitude,
-            'description'   => $this->description,
+            'description'   => $this->description
         ];
     }
 }

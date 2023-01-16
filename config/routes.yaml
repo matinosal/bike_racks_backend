@@ -7,4 +7,4 @@ kernel:
   type: annotation
 
 jwt_auth:
-  path: /user/auth
+  path: /auth

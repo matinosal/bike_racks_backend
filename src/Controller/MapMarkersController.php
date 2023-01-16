@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Serializer;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\MapMarker;
 
-#[Route('/markers')]
+#[Route('/api/markers')]
 class MapMarkersController extends AbstractController
 {
     #[Route('/location', methods:["POST"], name:"get_marker_by_location")]
@@ -30,7 +30,7 @@ class MapMarkersController extends AbstractController
 
         $markersAsJson = [];
         foreach($markers as $obj){
-            $markersAsJson[] = $obj->toJson();
+            $markersAsJson[] = $obj->toJsonQuickInfo();
         }
 
         return $this->json([
@@ -45,7 +45,7 @@ class MapMarkersController extends AbstractController
         $marker = $doctrine->getManager()->getRepository(MapMarker::class)->find($id);
         return $this->json([
             'code'      => 200,
-            'marker'   => $marker->toJson()
+            'marker'    => $marker->toJson()
         ]);
     }
 

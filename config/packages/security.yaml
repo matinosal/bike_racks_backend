@@ -21,7 +21,7 @@ security:
       jwt: ~
 
     jwt_auth:
-      pattern: ^/user/auth
+      pattern: ^/auth
       stateless: true
       json_login:
         username_path: email
@@ -30,8 +30,8 @@ security:
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
   access_control:
-    - { path: ^/markers/location, roles: PUBLIC_ACCESS }
-    - { path: ^/markers/\d+, roles: PUBLIC_ACCESS }
-    - { path: ^/user/add, roles: PUBLIC_ACCESS }
-    - { path: ^/user/auth, roles: PUBLIC_ACCESS }
+    - { path: ^/api/markers/location, roles: PUBLIC_ACCESS }
+    - { path: ^/api/markers/\d+, roles: PUBLIC_ACCESS }
+    - { path: ^/api/user/add, roles: PUBLIC_ACCESS }
+    - { path: ^/api/user/auth, roles: PUBLIC_ACCESS }
     - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
