@@ -46,7 +46,7 @@ class MapMarkersController extends BaseController
         ]);
     }
 
-    #[Route('/', methods:["POST","GET"], name:"get_marker_info")]
+    #[Route('/', methods:["POST","GET"], name:"add_marker")]
     public function newMarker(Security $security,ManagerRegistry $doctrine,Request $request,SluggerInterface $slugger): JsonResponse
     {
         $data = $request->request->all();
@@ -72,7 +72,8 @@ class MapMarkersController extends BaseController
 
                 
         $safeFilename = $slugger->slug($data['imageName']);
-        $newFilename =  $safeFilename.'-'.uniqid().'.'.$data['image']->guessExtension();
+        $newFilename =  $safeFilename.'.'.$data['image']->guessExtension();
+        
         try{
             $data['image']->move(
                 $this->getParameter('upload_dir'),
@@ -92,7 +93,7 @@ class MapMarkersController extends BaseController
         $marker->setDescription($data['description']);
         $marker->setAddedBy($user->getId());
         $marker->setImgSrc($newFilename);
-        
+
         $manager = $doctrine->getManager();
         $manager->persist($marker);
         $manager->flush();
