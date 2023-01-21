@@ -92,12 +92,4 @@ class UserController extends BaseController
         ]);
     }
 
-    private function validateFields($data,$requiredFields){
-        $errors = [];
-        foreach($requiredFields as $field){
-            if(!isset($data[$field]) && empty($data[$field]))
-                $errors[] = $field;
-        }
-        return $errors;
-    }
 }

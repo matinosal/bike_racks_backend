@@ -26,6 +26,9 @@ class MapMarker implements JsonSerializable
     #[ORM\Column]
     private ?int $added_by = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $img_src = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +88,18 @@ class MapMarker implements JsonSerializable
     public function setAddedBy(int $added_by): self
     {
         $this->added_by = $added_by;
+
+        return $this;
+    }
+
+    public function getImgSrc(): ?string
+    {
+        return $this->img_src;
+    }
+
+    public function setImgSrc(?string $img_src): self
+    {
+        $this->img_src = $img_src;
 
         return $this;
     }
