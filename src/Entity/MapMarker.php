@@ -77,7 +77,7 @@ class MapMarker implements JsonSerializable
             'latitude'      => $this->latitude,
             'longitude'     => $this->longitude,
             'description'   => $this->description,
-            'image'         => $this->img_src
+            'uri'         => $this->img_src
         ];
     }
 

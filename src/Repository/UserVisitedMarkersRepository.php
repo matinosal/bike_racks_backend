@@ -48,6 +48,17 @@ class UserVisitedMarkersRepository extends ServiceEntityRepository
                 ->getOneOrNullResult()['visited'];
     }
 
+    public function visited(int $userId, int $markerId): int {
+        return $this->createQueryBuilder('u')
+                ->andWhere('u.user_id = :id')
+                ->andWhere('u.map_marker_id = :marker_id')
+                ->setParameter('id',$userId)
+                ->setParameter('marker_id',$markerId)
+                ->select('COUNT (u.user_id) as visited')
+                ->getQuery()
+                ->getOneOrNullResult()['visited'];
+    }
+
 //    /**
 //     * @return UserVisitedMarkers[] Returns an array of UserVisitedMarkers objects
 //     */
